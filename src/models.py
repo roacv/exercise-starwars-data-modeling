@@ -39,9 +39,9 @@ class User(Base):
      datecrea = Column(DateTime(timezone=True), nullable=False)
      email = Column(String(250), nullable=False)
      password = Column(String(8), nullable=False)
-     characters = relationship("Role", secondary=roles_users, backref="users")
+     favs = relationship("Fav",backref="user")
 
-class Planets(Base):
+class Planet(Base):
      __tablename__ = 'planets'
      # Here we define columns for the table person
      # Notice that each column is also a normal Python instance attribute.
@@ -58,7 +58,7 @@ class Planets(Base):
      gravity = Column(String(50), nullable=False)
      description = Column(Text, nullable=False)
 
-class Characters(Base):
+class Character(Base):
      __tablename__ = 'characters'
      # Here we define columns for the table person
      # Notice that each column is also a normal Python instance attribute.
@@ -74,14 +74,17 @@ class Characters(Base):
      skincolor = Column(String(50), nullable=False)
      description = Column(Text, nullable=False)
 
-class Favs(Base):
+class Fav(Base):
      __tablename__ = 'favs'
      # Here we define columns for the table person
      # Notice that each column is also a normal Python instance attribute.
      id = Column(Integer, primary_key=True)
-     user_id = Column(String(250), ForeignKey("user.id"), nullable=False)
-     planet_id = Column(String(250), ForeignKey("planets.id"), nullable=False)
+     tipo = Column(String(1), nullable=False)
+     user_id = Column(String(250), ForeignKey("user.id"), nullable=True)
+     planet_id = Column(String(250), ForeignKey("planets.id"), nullable=True)
      character_id = Column(String(50), ForeignKey("characters.id"), nullable=False)
+     planet = relationship("Planet",backref="favs")
+     character = relationship("Character",backref="favs")
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
